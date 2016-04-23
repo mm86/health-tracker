@@ -3,7 +3,7 @@ var app = app || {};
 
 (function() {
     'use strict';
-    var FoodItem = Backbone.View.extend({
+    app.FoodItem = Backbone.View.extend({
         initialize: function(options) {
             console.log("inside footitem");
         },

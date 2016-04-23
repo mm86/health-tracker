@@ -3,15 +3,19 @@ var app = app || {};
 
 (function() {
 
-    var AppView = Backbone.View.extend({
+    app.AppView = Backbone.View.extend({
 
-    template: "<ul id='food-list'></ul>",
+    template: "<input type='text' placeholder='search'> \
+               <button>Search</button> \
+               <ul id='food-list'></ul>",
 
     initialize: function(options) {
+        console.log("inside AppView initialize");
         var food;
     },
 
     render: function() {
+        console.log("inside AppView render");
         this.$el.html(this.template);
         return this;
     },
@@ -21,17 +25,19 @@ var app = app || {};
     },
 
     getfoodlist: function() {
+        console.log("inside AppView getfoodlist");
         var title = this.$el.find('input').val();
-        food = new FoodList({ title: title });
+        food = new app.FoodList({ title: title });
         food.fetch({ success: this.renderfood.bind(this) });
 
     },
 
     renderfood: function(movies) {
+        console.log("inside AppView renderfood");
         this.$el.find('#food-list').empty();
         var foodview;
         for (var n in food.models) {
-            foodview = new FoodItem({ model: movies.models[n] });
+            foodview = new app.FoodItem({ model: food.models[n] });
             this.$el.find('#food-list').append(foodview.render().el);
         }
     }
