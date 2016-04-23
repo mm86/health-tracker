@@ -3,7 +3,7 @@ var app = app || {};
 
 (function() {
 
-    var Search = Backbone.View.extend({
+    var AppView = Backbone.View.extend({
 
     template: "<ul id='food-list'></ul>",
 
