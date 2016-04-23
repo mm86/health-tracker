@@ -9,10 +9,9 @@ var app = app || {};
         },
         search: function() {
 
-            var view = new AppView.Views.Search();
-            $('#main').html(view.render().el);
+            var view = new app.AppView();
+            $('#displayFoodList').html(view.render().el);
         }
-
     });
 
     app.router = new Router();
