@@ -18,7 +18,7 @@ var app = app || {};
                 this.model = options.model;
             console.log(this.model);
             app.foodCollection.create(this.newAttributes());
-            //this.model.on('destroy', this.remove, this);
+            this.model.on('destroy', this.remove, this);
 
         },
 
