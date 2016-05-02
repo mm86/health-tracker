@@ -1,7 +1,7 @@
 /*global Backbone */
 var app = app || {};
 
-(function() {
+(function($) {
 
 app.AppView = Backbone.View.extend({
 
@@ -97,4 +97,4 @@ app.AppView = Backbone.View.extend({
     }
 });
 
-})();
+})(jQuery);
