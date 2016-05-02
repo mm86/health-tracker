@@ -5,9 +5,9 @@ var app = app || {};
     'use strict';
     var Router = Backbone.Router.extend({
         routes: {
-            '*path': 'search'
+            '': 'home'
         },
-        search: function() {
+        home: function() {
 
             var view = new app.AppView();
             $('#displayFoodList').html(view.render().el);
