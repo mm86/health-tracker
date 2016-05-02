@@ -9,14 +9,14 @@ app.AppView = Backbone.View.extend({
     initialize: function() {
         var fooditem;
         var records;
-        app.foodCollection.on('add', this.addRecords, this);
-        app.foodCollection.on('reset', this.addAll, this);
-        app.foodCollection.fetch();
+        app.foodCollection.on('add', this.renderFood, this);
+      //  app.foodCollection.on('reset', this.addAll, this);
+      //  app.foodCollection.fetch();
 
     },
     events: {
 
-        'click #add-food': 'addRecords',
+        'click #add-food': 'renderFood',
         'keyup #user-input': 'autosearch'
     },
 
@@ -25,7 +25,6 @@ app.AppView = Backbone.View.extend({
         $("#user-input").autocomplete({
             delay: 100,
             source: function(request, response) {
-                var results = [];
 
                 // Suggest URL
                 var suggestURL = "https://api.nutritionix.com/v1_1/search/%QUERY?results=0:10&fields=item_name,brand_name,item_id,nf_calories&appId=41324021&appKey=b16be109bec67fb1282c4b4559e8666f";
@@ -84,16 +83,29 @@ app.AppView = Backbone.View.extend({
 
     },
     /* End of Autocomplete search */
-    addAll: function() {
+   /* addAll: function() {
 
         app.foodCollection.each(this.addRecords, this);
 
-    },
-    addRecords: function() {
+    },*/
 
+    renderFood: function() {
+
+        app.foodCollection.create(this.newAttributes());
+        console.log(app.foodCollection);
         var view = new app.FoodRecords({ model: records });
         $('#foodRecords').append(view.render().el);
 
+    },
+
+    newAttributes: function() {
+        return {
+            item_name: records.item_name,
+            brand_name: records.brand_name,
+            calories: records.calories,
+            id: records.id
+
+        }
     }
 });
 
