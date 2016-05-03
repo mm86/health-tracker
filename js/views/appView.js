@@ -2,25 +2,24 @@
 var app = app || {};
 
 (function($) {
-
+var records;
 app.AppView = Backbone.View.extend({
 
-    el: '#main',
+    el: '#healthtracker',
     initialize: function() {
-        var fooditem;
-        var records;
-        app.foodCollection.on('add', this.renderFood, this);
-      //  app.foodCollection.on('reset', this.addAll, this);
-      //  app.foodCollection.fetch();
+        this.input = this.$('#user-input');
+        app.foodCollection.on('add', this.addAll, this);
+        app.foodCollection.on('reset', this.addAll, this);
+        app.foodCollection.fetch(); // Loads list from local storage
 
     },
     events: {
 
         'click #add-food': 'renderFood',
-        'keyup #user-input': 'autosearch'
+        'keyup #user-input': 'autoSearch'
     },
 
-    autosearch: function() {
+    autoSearch: function() {
 
         $("#user-input").autocomplete({
             delay: 100,
@@ -83,30 +82,33 @@ app.AppView = Backbone.View.extend({
 
     },
     /* End of Autocomplete search */
-   /* addAll: function() {
-
-        app.foodCollection.each(this.addRecords, this);
-
-    },*/
-
-    renderFood: function() {
-
+      renderFood: function(){
         app.foodCollection.create(this.newAttributes());
-        console.log(app.foodCollection);
-        var view = new app.FoodRecords({ model: records });
+        this.input.val(''); // clean input box
+      },
+
+      addOne: function(foodrecord){
+        console.log("inside addOne");
+        var view = new app.FoodRecords({model: foodrecord});
         $('#foodRecords').append(view.render().el);
+      },
 
-    },
+      addAll: function(){
+        console.log("inside addAll");
+        this.$('#foodRecords').html(''); // clean the todo list
+        //filter todo item list
+          app.foodCollection.each(this.addOne, this);
+      },
 
-    newAttributes: function() {
+      newAttributes: function(){
+        console.log("inside newAttributes");
         return {
-            item_name: records.item_name,
-            brand_name: records.brand_name,
-            calories: records.calories,
-            id: records.id
-
+          item_name: records.item_name,
+          brand_name: records.brand_name,
+          calories: records.calories,
+          id: records.id
         }
-    }
+      }
 });
 
 })(jQuery);

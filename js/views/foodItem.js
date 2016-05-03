@@ -5,24 +5,20 @@ var app = app || {};
     'use strict';
     app.FoodRecords = Backbone.View.extend({
         tagName: 'li',
-        template: '<button>Delete</button>',
+        template: _.template($('#item-template').html()),
 
         render: function() {
-            this.$el.html(this.model.item_name+this.template);
-            console.log(this.model.item_name);
+            this.$el.html(this.template(this.model.toJSON()));
             return this;
         },
 
-        initialize: function(options) {
-            if (options.model)
-                this.model = options.model;
-                console.log(this.model);
-         //   this.model.on('destroy', this.remove, this);
+        initialize: function(){
 
+            this.model.on('destroy', this.remove, this);
         },
 
         events: {
-            'click button': 'destroy'
+            'click .destroy': 'destroy'
         },
 
         destroy: function() {
