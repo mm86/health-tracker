@@ -2,15 +2,16 @@
 var app = app || {};
 
 (function($) {
-var records;
+
 
 app.AppView = Backbone.View.extend({
 
     el: '#healthtracker',
     initialize: function() {
+        var self = this;
         this.input = this.$('#user-input');
         this.servings = $("#servings");
-
+        this.records;
         app.foodCollection.on('add', this.addAll, this);
         app.foodCollection.on('reset', this.addAll, this);
         app.foodCollection.fetch(); // Loads list from local storage
