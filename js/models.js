@@ -7,7 +7,7 @@ var app = app || {};
             item_name: '',
             brand_name: '',
             calories: '',
-            id:''
+            item_id:''
 
         },
 

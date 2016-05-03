@@ -6,29 +6,43 @@
 </head>
 
 <body>
-
     <section id="healthtracker">
-    <header id="header">
-      <h1>Health Tracker</h1>
-      <input id="user-input" placeholder="What needs to be done?" autofocus>
-      <input type="submit" value="Add Food" id="add-food">
-    </header>
-    <section id="main">
-      <ul id="foodRecords"></ul>
+        <header id="header">
+            <h1>Health Tracker</h1>
+            <input id="user-input" placeholder="What needs to be done?" autofocus>
+            <select id="servings">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+            <input type="submit" value="Add Food" id="add-food">
+        </header>
+        <section id="main">
+            <ul id="foodRecords"></ul>
+        </section>
     </section>
-    </section>
-
     <!-- Templates -->
     <script type="text/template" id="item-template">
-    <div class="view">
-      <label><%- item_name %></label>
-      <label> , <%- brand_name %></label>
-      <label> , <%- calories %></label>
-      <button class="destroy">Remove</button>
-    </div>
+        <div class="view">
+            <label>
+                <%- item_name %>
+            </label>
+            <label> ,
+                <%- brand_name %>
+            </label>
+            <label> ,
+                <%- calories %>
+            </label>
+            <button class="destroy">Remove</button>
+        </div>
     </script>
-
-
     <!-- Libraries and Dependencies-->
     <!-- ========= -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>

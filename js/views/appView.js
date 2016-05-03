@@ -3,11 +3,14 @@ var app = app || {};
 
 (function($) {
 var records;
+
 app.AppView = Backbone.View.extend({
 
     el: '#healthtracker',
     initialize: function() {
         this.input = this.$('#user-input');
+        this.servings = $("#servings");
+
         app.foodCollection.on('add', this.addAll, this);
         app.foodCollection.on('reset', this.addAll, this);
         app.foodCollection.fetch(); // Loads list from local storage
@@ -50,7 +53,7 @@ app.AppView = Backbone.View.extend({
                                     return {
                                         value: item.fields.item_name,
                                         item_name: item.fields.item_name,
-                                        id: item.fields.item_id,
+                                        item_id: item.fields.item_id,
                                         brand_name: item.fields.brand_name,
                                         calories: item.fields.nf_calories
 
@@ -83,6 +86,9 @@ app.AppView = Backbone.View.extend({
     },
     /* End of Autocomplete search */
       renderFood: function(){
+
+        console.log(this.servings.val());
+        records.calories = records.calories * this.servings.val();
         app.foodCollection.create(this.newAttributes());
         this.input.val(''); // clean input box
       },
@@ -106,7 +112,7 @@ app.AppView = Backbone.View.extend({
           item_name: records.item_name,
           brand_name: records.brand_name,
           calories: records.calories,
-          id: records.id
+          item_id: records.item_id
         }
       }
 });
