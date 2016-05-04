@@ -3,9 +3,9 @@ var app = app || {};
 
 (function() {
     'use strict';
-    app.FoodCollection = Backbone.Collection.extend({
+    app.FoodCollection = Backbone.Firebase.Collection.extend({
         model: app.FoodItem,
-        localStorage: new Store("health-tracker")
+        url: "https://fiery-inferno-4707.firebaseio.com"
 
     });
 

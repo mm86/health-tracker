@@ -8,14 +8,15 @@ app.AppView = Backbone.View.extend({
 
     el: '#healthtracker',
     template: _.template($('#total-calorie-template').html()),
+
     initialize: function() {
         var self = this;
         this.input = this.$('#user-input');
         this.servings = $("#servings");
         this.total_calories = 0;
         this.records;
-        app.foodCollection.on('add', this.addAll, this);
-        app.foodCollection.on('reset', this.addAll, this);
+        app.foodCollection.on('add', this.addOne, this);
+     //   app.foodCollection.on('reset', this.addAll, this);
         app.foodCollection.on('update', this.renderTotal, this);
         app.foodCollection.fetch(); // Loads list from local storage
 
@@ -101,12 +102,12 @@ app.AppView = Backbone.View.extend({
         $('#foodRecords').append(view.render().el);
       },
 
-      addAll: function(){
+    /*  addAll: function(){
         console.log("inside addAll");
         this.$('#foodRecords').html(''); //clean the todo list
         app.foodCollection.each(this.addOne, this);
 
-      },
+      },*/
 
       newAttributes: function(){
         console.log("inside newAttributes");
