@@ -10,15 +10,16 @@ app.AppView = Backbone.View.extend({
     template: _.template($('#total-calorie-template').html()),
 
     initialize: function() {
+        var date = new Date();
+        var currentDate = (date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear());
+        $('#mydate').val(currentDate).glDatePicker();
         var self = this;
         this.input = this.$('#user-input');
         this.servings = $("#servings");
         this.total_calories = 0;
         this.records;
         app.foodCollection.on('add', this.addOne, this);
-     //   app.foodCollection.on('reset', this.addAll, this);
         app.foodCollection.on('update', this.renderTotal, this);
-        app.foodCollection.fetch(); // Loads list from local storage
 
     },
     events: {
@@ -102,12 +103,6 @@ app.AppView = Backbone.View.extend({
         $('#foodRecords').append(view.render().el);
       },
 
-    /*  addAll: function(){
-        console.log("inside addAll");
-        this.$('#foodRecords').html(''); //clean the todo list
-        app.foodCollection.each(this.addOne, this);
-
-      },*/
 
       newAttributes: function(){
         console.log("inside newAttributes");
@@ -121,13 +116,14 @@ app.AppView = Backbone.View.extend({
         }
       },
 
-      renderTotal: function(){ // renders total calories consumed
+      renderTotal: function(){
+        console.log("inside renderTotal");
         var cals = 0;
         var servings = 0;
         var item_cal = 0;
         var total_calories = 0;
 
-        app.foodCollection.each(function(model){ // iterate through collection to calculate total calories consumed
+        app.foodCollection.each(function(model){
 
             cals = model.get("calories");
             num = model.get("servings");
@@ -136,7 +132,7 @@ app.AppView = Backbone.View.extend({
             return total_calories;
         });
 
-        $("#total-calories").html(this.template({total_cals : total_calories})); // update DOM element to current calories consumed
+        $("#total-calories").html(this.template({total_cals : total_calories}));
 
     },
 });
