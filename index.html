@@ -23,9 +23,11 @@
                 <option value="10">10</option>
             </select>
             <input type="submit" value="Add Food" id="add-food">
+
         </header>
         <section id="main">
             <ul id="foodRecords"></ul>
+            <p>Total calories for the day: <label id="total-calories"></label></p>
         </section>
     </section>
     <!-- Templates -->
@@ -41,6 +43,14 @@
                 <%- calories %>
             </label>
             <button class="destroy">Remove</button>
+        </div>
+    </script>
+        <script type="text/template" id="total-calorie-template">
+        <div>
+            <label>
+                <%- total_cals %>
+            </label>
+
         </div>
     </script>
     <!-- Libraries and Dependencies-->

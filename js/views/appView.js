@@ -7,13 +7,16 @@ var app = app || {};
 app.AppView = Backbone.View.extend({
 
     el: '#healthtracker',
+    template: _.template($('#total-calorie-template').html()),
     initialize: function() {
         var self = this;
         this.input = this.$('#user-input');
         this.servings = $("#servings");
+        this.total_calories = 0;
         this.records;
         app.foodCollection.on('add', this.addAll, this);
         app.foodCollection.on('reset', this.addAll, this);
+        app.foodCollection.on('update', this.renderTotal, this);
         app.foodCollection.fetch(); // Loads list from local storage
 
     },
@@ -41,7 +44,7 @@ app.AppView = Backbone.View.extend({
                     data: JSON.stringify({
                         item_name: "",
                         brand_name: "",
-                        id: "",
+                        item_id: "",
                         calories: ""
 
                     }),
@@ -88,8 +91,6 @@ app.AppView = Backbone.View.extend({
     /* End of Autocomplete search */
       renderFood: function(){
 
-        console.log(this.servings.val());
-        records.calories = records.calories * this.servings.val();
         app.foodCollection.create(this.newAttributes());
         this.input.val(''); // clean input box
       },
@@ -102,9 +103,9 @@ app.AppView = Backbone.View.extend({
 
       addAll: function(){
         console.log("inside addAll");
-        this.$('#foodRecords').html(''); // clean the todo list
-        //filter todo item list
-          app.foodCollection.each(this.addOne, this);
+        this.$('#foodRecords').html(''); //clean the todo list
+        app.foodCollection.each(this.addOne, this);
+
       },
 
       newAttributes: function(){
@@ -113,9 +114,30 @@ app.AppView = Backbone.View.extend({
           item_name: records.item_name,
           brand_name: records.brand_name,
           calories: records.calories,
-          item_id: records.item_id
+          item_id: records.item_id,
+          servings: this.servings.val()
+
         }
-      }
+      },
+
+      renderTotal: function(){ // renders total calories consumed
+        var cals = 0;
+        var servings = 0;
+        var item_cal = 0;
+        var total_calories = 0;
+
+        app.foodCollection.each(function(model){ // iterate through collection to calculate total calories consumed
+
+            cals = model.get("calories");
+            num = model.get("servings");
+            item_cal = cals * num;
+            total_calories += item_cal;
+            return total_calories;
+        });
+
+        $("#total-calories").html(this.template({total_cals : total_calories})); // update DOM element to current calories consumed
+
+    },
 });
 
 })(jQuery);
