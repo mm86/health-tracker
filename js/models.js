@@ -8,7 +8,8 @@ var app = app || {};
             brand_name: '',
             calories: '',
             item_id:'',
-            servings: ''
+            servings: '',
+            date: ''
 
 
         },

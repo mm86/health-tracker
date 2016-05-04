@@ -14,6 +14,7 @@ app.AppView = Backbone.View.extend({
         var currentDate = (date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear());
         $('#mydate').val(currentDate).glDatePicker();
         var self = this;
+        this.model_date;
         this.input = this.$('#user-input');
         this.servings = $("#servings");
         this.total_calories = 0;
@@ -93,6 +94,7 @@ app.AppView = Backbone.View.extend({
     /* End of Autocomplete search */
       renderFood: function(){
 
+        model_date = $('#mydate').val();
         app.foodCollection.create(this.newAttributes());
         this.input.val(''); // clean input box
       },
@@ -111,7 +113,8 @@ app.AppView = Backbone.View.extend({
           brand_name: records.brand_name,
           calories: records.calories,
           item_id: records.item_id,
-          servings: this.servings.val()
+          servings: this.servings.val(),
+          date: this.model_date
 
         }
       },
