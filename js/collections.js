@@ -5,9 +5,12 @@ var app = app || {};
     'use strict';
     app.FoodCollection = Backbone.Firebase.Collection.extend({
         model: app.FoodItem,
-        url: "https://fiery-inferno-4707.firebaseio.com"
+
+        initialize: function(models, params) {
+            this.url = params.url;
+        },
 
     });
 
-    app.foodCollection = new app.FoodCollection();
+
 })();
