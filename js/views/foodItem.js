@@ -13,9 +13,9 @@ var app = app || {};
             return this;
         },
 
-        initialize: function(){
-
-            this.model.on('destroy', this.remove, this);
+        initialize: function() {
+            this.listenTo(this.model, "change", this.render);
+            this.listenTo(this.model, "destroy", this.remove);
         },
 
         events: {
@@ -23,7 +23,12 @@ var app = app || {};
         },
 
         destroy: function() {
-            this.model.destroy();
+
+            this.model.destroy(); //Leads to xml http request not allowed error
+            this.remove();
+
         },
     });
 })(jQuery);
+
+

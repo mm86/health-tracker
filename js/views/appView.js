@@ -19,15 +19,16 @@ var app = app || {};
             this.servings = $("#servings");
             this.total_calories = 0;
             this.records;
-
+            this.$list = $("#foodRecords");
+            this.render();
 
         },
 
         events: {
 
-            'click #add-food': 'renderFood',
+            'click #add-food': 'addFood',
             'keyup #user-input': 'autoSearch',
-           // 'change #mydate': 'renderFood'
+            'change #date': 'render'
 
         },
 
@@ -91,38 +92,42 @@ var app = app || {};
             });
         },
 
+    //called when initialized and when date is changed
+    render: function() {
+        console.log("inside render");
+        var self = this;
 
-        renderFood: function() {
-            console.log("inside renderFood");
-            model_date = $('#date').val();
-            this.dateUrl = "https://fiery-inferno-4707.firebaseio.com/" + model_date;
-            app.foodCollection = new app.FoodCollection([], { url: this.dateUrl });
-            app.foodCollection.on('add', this.addOne, this);
-          //  app.foodCollection.on('update', this.renderTotal, this);
-            app.foodCollection.create(this.newAttributes());
-            this.input.val('');
-        },
+        this.model_date = $('#date').val();
+        this.dateUrl = "https://fiery-inferno-4707.firebaseio.com/" + this.model_date;
+        this.foodCollection = new app.FoodCollection([], { url: this.dateUrl });
+        this.listenTo(this.foodCollection, 'add', this.render);
 
-        addOne: function() {
-            console.log("inside addOne");
-            $('#foodRecords').html('');
-            console.log(app.foodCollection);
-            app.foodCollection.each(function(food) {
+        this.$list.html('');
+        this.foodCollection.each(function(food) {
                 var view = new app.FoodRecords({ model: food });
-                $('#foodRecords').append(view.render().el);
-            });
+                self.$list.append(view.render().el);
+        });
+        return this;
+    },
 
-        },
+    //called when an item is added and the add-food button is clicked
+    addFood: function() {
+        console.log("inside addFood");
+        this.foodCollection.create(this.newAttributes());
+        this.input.val('');
+        this.render();
+    },
 
-        newAttributes: function() {
-            console.log("inside newAttributes");
-            return {
-                item_name: records.item_name,
-                brand_name: records.brand_name,
-                calories: records.calories,
-                item_id: records.item_id,
-                servings: this.servings.val(),
-                date: this.model_date
+
+    newAttributes: function() {
+        console.log("inside newAttributes");
+        return {
+            item_name: records.item_name,
+            brand_name: records.brand_name,
+            calories: records.calories,
+            item_id: records.item_id,
+            servings: this.servings.val(),
+            date: this.model_date
 
             }
         },
