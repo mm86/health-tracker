@@ -113,6 +113,7 @@ var app = app || {};
     //called when an item is added and the add-food button is clicked
     addFood: function() {
         console.log("inside addFood");
+        if (this.input.val() == ''){return;};
         this.foodCollection.create(this.newAttributes());
         this.input.val('');
         this.render();
