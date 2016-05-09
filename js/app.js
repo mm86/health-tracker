@@ -4,5 +4,5 @@ var app = app || {};
 
 $(function () {
     'use strict';
-     new app.AppView();
+    app.appView = new app.AppView();
 });

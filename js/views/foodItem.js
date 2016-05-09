@@ -9,7 +9,7 @@ var app = app || {};
 
         render: function() {
             console.log("inside foodrecord");
-            this.$el.html(this.template(this.model.toJSON()));
+            this.$el.html(this.template(this.model.attributes));
             return this;
         },
 
@@ -18,15 +18,13 @@ var app = app || {};
         },
 
         events: {
-            'click .destroy': 'destroy'
+            'click .delete': 'clear'
         },
 
-        destroy: function() {
+        clear: function() {
+          this.model.destroy(); //Leads to xml http request not allowed error
 
-            this.model.destroy(); //Leads to xml http request not allowed error
-            this.remove();
-
-        },
+        }
     });
 })(jQuery);
 

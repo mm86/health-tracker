@@ -27,7 +27,7 @@ var app = app || {};
         events: {
 
             'click #add-food': 'addFood',
-            'keyup #user-input': 'autoSearch',
+            'keydown #user-input': 'autoSearch',
             'change #date': 'render'
 
         },
@@ -85,6 +85,7 @@ var app = app || {};
                     })
 
                 },
+                minLength: 1,
                 select: function(event, ui) {
 
                     records = ui.item;
@@ -101,7 +102,6 @@ var app = app || {};
         this.dateUrl = "https://fiery-inferno-4707.firebaseio.com/" + this.model_date;
         this.foodCollection = new app.FoodCollection([], { url: this.dateUrl });
         this.listenTo(this.foodCollection, 'add', this.render);
-
         this.$list.html('');
         this.foodCollection.each(function(food) {
                 var view = new app.FoodRecords({ model: food });
