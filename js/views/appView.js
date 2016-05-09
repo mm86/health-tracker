@@ -93,45 +93,66 @@ var app = app || {};
             });
         },
 
-    //called when initialized and when date is changed
-    render: function() {
-        console.log("inside render");
-        var self = this;
-
-        this.model_date = $('#date').val();
-        this.dateUrl = "https://fiery-inferno-4707.firebaseio.com/" + this.model_date;
-        this.foodCollection = new app.FoodCollection([], { url: this.dateUrl });
-        this.listenTo(this.foodCollection, 'add', this.render);
-        this.$list.html('');
-        this.foodCollection.each(function(food) {
+        render: function() {
+            console.log("inside render");
+            var self = this;
+            this.model_date = $('#date').val();
+            this.dateUrl = "https://fiery-inferno-4707.firebaseio.com/" + this.model_date;
+            this.foodCollection = new app.FoodCollection([], { url: this.dateUrl });
+            this.listenTo(this.foodCollection, 'add', this.render);
+            this.listenTo(this.foodCollection, 'all', this.renderTotal);
+            this.$list.html('');
+            this.foodCollection.each(function(food) {
+                console.log("iterating over foodCollection");
                 var view = new app.FoodRecords({ model: food });
                 self.$list.append(view.render().el);
-        });
-        return this;
-    },
+            });
+            return this;
+        },
 
-    //called when an item is added and the add-food button is clicked
-    addFood: function() {
-        console.log("inside addFood");
-        if (this.input.val() == ''){return;};
-        this.foodCollection.create(this.newAttributes());
-        this.input.val('');
-        this.render();
-    },
+        //called when an item is added and the add-food button is clicked
+        addFood: function() {
+            console.log("inside addFood");
+            if (this.input.val() == '') {
+                return;
+            };
+            this.foodCollection.create(this.newAttributes());
+            this.input.val('');
+            this.render();
+        },
 
-
-    newAttributes: function() {
-        console.log("inside newAttributes");
-        return {
-            item_name: records.item_name,
-            brand_name: records.brand_name,
-            calories: records.calories,
-            item_id: records.item_id,
-            servings: this.servings.val(),
-            date: this.model_date
+        newAttributes: function() {
+            console.log("inside newAttributes");
+            return {
+                item_name: records.item_name,
+                brand_name: records.brand_name,
+                calories: records.calories,
+                item_id: records.item_id,
+                servings: this.servings.val(),
+                date: this.model_date
 
             }
         },
+
+        renderTotal: function() {
+            console.log("inside renderTotal");
+            var cals = 0;
+            var servings = 0;
+            var item_cal = 0;
+            var total_calories = 0;
+
+            this.foodCollection.each(function(model) {
+
+                cals = model.get("calories");
+                num = model.get("servings");
+                item_cal = cals * num;
+                total_calories += item_cal;
+                return total_calories;
+            });
+
+            $("#total-calories").html(this.template({ total_cals: total_calories }));
+
+        }
 
     });
 
