@@ -9,33 +9,49 @@
 
 <body>
     <section id="healthtracker">
-            <div class="brand">HEALTH TRACKER</div>
-                    <input id="user-input" placeholder="What needs to be done?" autofocus>
-                    <select id="servings">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                    </select>
-                    <input type="submit" value="Add Food" id="add-food">
-                    <input type="text" id="date" gldp-id="date" />
-                    <div gldp-el="date" style="width:400px; height:300px; position:absolute; top:70px; left:100px;">
-                    </div>
-                    <input type="submit" value="Display Chart" id="chart">
-                    <input type="submit" value="Recipes" id="recipes">
-
-        <section id="main">
-            <ul id="foodRecords"></ul>
-            <p>Total calories for the day:
-                <label id="total-calories"></label>
-            </p>
-        </section>
+        <div class="brand">HEALTH TRACKER</div>
+        <div class="container main">
+            <div class="row input-group" id="search">
+                <span class="input-group-addon input-header">Search Nutritionix API</span>
+                <input class="col-sm-12 form-control" id="user-input" placeholder="Enter search term">
+            </div>
+            <div class="servings">
+                <select id="servings">
+                    <option value="Servings">Servings</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+                <input type="submit" value="Add Food" id="add-food">
+            </div>
+            <div class="calendar">
+                <input type="text" id="date" gldp-id="date" />
+                <div gldp-el="date" style="width:400px; height:300px; position:absolute; top:70px; left:100px;">
+                </div>
+            </div>
+            <div class="features">
+                <input type="submit" value="Display Chart" id="chart">
+                <input type="submit" value="Recipes" id="recipes">
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">My Food Records</h3>
+                </div>
+                <div class="panel-body">
+                    <ul id="foodRecords"></ul>
+                    <p>Total calories for the day:
+                        <label id="total-calories"></label>
+                    </p>
+                </div>
+            </div>
+        </div>
     </section>
     <!-- Templates -->
     <script type="text/template" id="item-template">

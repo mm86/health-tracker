@@ -1,6 +1,14 @@
 
 /* HTML, Body and General
 ---------------------------*/
+body{
+
+width: 100%;
+}
+
+/* Brand Name
+---------------------------*/
+
 .brand {
 	display: inherit;
     margin: 0;
@@ -15,6 +23,47 @@
     background: #0099FF;
 }
 
+
+/* Main Application
+---------------------------*/
+
+.main {
+
+	margin: 40px auto 0 auto;
+}
+
+
+.servings {
+
+	width: 200px;
+	margin: 20px auto;
+	font-size: 16px;
+}
+
+#servings {
+
+	margin-right: 20px;
+}
+
+.calendar {
+
+	width: 170px;
+	margin: 0 auto;
+
+}
+
+.features {
+
+	width: 220px;
+	margin: 20px auto;
+
+	font-size: 16px;
+}
+
+#chart {
+
+	margin-right: 29px;
+}
 /* jQuery UI Autocomplete
 ---------------------------*/
 
@@ -32,6 +81,19 @@
 
 .ui-autocomplete {
 
-	background:grey;
+	background: #F8F8F8;
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin: 0;
 
+}
+
+
+.ui-menu-item {
+
+	list-style-type: none;
+	padding: 10px 0;
+	border-bottom: 1px solid gray;
+	margin: 0 30px 0 0;
 }
