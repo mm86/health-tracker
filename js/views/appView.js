@@ -14,12 +14,25 @@ var app = app || {};
 
             var self = this;
 
-            this.model_date;
+            var date = new Date();
+            var current_date = (date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear());
+
             this.input = this.$('#user-input');
             this.servings = $("#servings");
             this.total_calories = 0;
             this.records;
             this.$list = $("#foodRecords");
+            $("#date").glDatePicker({
+                //upon instantiation, let's tell it that:
+                onClick: (function(el, cell, date, data) {
+                    //give me the chosen date
+                    el.val(date.toLocaleDateString());
+                    self.render();
+                }),
+
+            });
+
+            $("#date").val(current_date);
             this.render();
 
         },
@@ -27,11 +40,11 @@ var app = app || {};
         events: {
 
             'click #add-food': 'addFood',
+            'click #chart': 'displayChart',
             'keydown #user-input': 'autoSearch',
             'change #date': 'render'
 
         },
-
 
         autoSearch: function() {
             console.log("inside autosearch");
@@ -96,8 +109,10 @@ var app = app || {};
         render: function() {
             console.log("inside render");
             var self = this;
-            this.model_date = $('#date').val();
-            this.dateUrl = "https://fiery-inferno-4707.firebaseio.com/" + this.model_date;
+            this.model_date = $("#date").val();
+
+            this.dateUrl = "https://fiery-inferno-4707.firebaseio.com/" + this.model_date.replace(/\//g, '');
+            console.log(this.dateUrl);
             this.foodCollection = new app.FoodCollection([], { url: this.dateUrl });
             this.listenTo(this.foodCollection, 'add', this.render);
             this.listenTo(this.foodCollection, 'all', this.renderTotal);
@@ -107,7 +122,6 @@ var app = app || {};
                 var view = new app.FoodRecords({ model: food });
                 self.$list.append(view.render().el);
             });
-            return this;
         },
 
         //called when an item is added and the add-food button is clicked
@@ -118,7 +132,7 @@ var app = app || {};
             };
             this.foodCollection.create(this.newAttributes());
             this.input.val('');
-            this.render();
+            // this.render();
         },
 
         newAttributes: function() {
@@ -151,6 +165,32 @@ var app = app || {};
             });
 
             $("#total-calories").html(this.template({ total_cals: total_calories }));
+
+        },
+
+        displayChart: function() {
+            console.log("lets get started with the chart operation");
+            //Step 1: Get current week, month and year values from glDatePicker
+            //Get dates for Current week
+             var date = new Date();
+             var current_date;
+             var week = [];
+             for (var i=0;i<7;i++){
+                 current_date = (date.getMonth() + 1 + "/" + (date.getDate()+i) + "/" + date.getFullYear());
+
+                 week.push(current_date);
+
+             }
+             console.log(week);
+            //How to get data from Firebase for this weeks data
+           /*
+            var ref = new Firebase("https://fiery-inferno-4707.firebaseio.com/5102016");
+            // Attach an asynchronous callback to read the data at our posts reference
+            ref.on("value", function(snapshot) {
+                console.log(snapshot.val());
+            }, function(errorObject) {
+                console.log("The read failed: " + errorObject.code);
+            }); */
 
         }
 
