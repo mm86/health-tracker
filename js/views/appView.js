@@ -143,7 +143,8 @@ var app = app || {};
                 calories: records.calories,
                 item_id: records.item_id,
                 servings: this.servings.val(),
-                date: this.model_date
+                date: this.model_date,
+                total_calories: records.calories * this.servings.val()
 
             }
         },
@@ -170,27 +171,51 @@ var app = app || {};
 
         displayChart: function() {
             console.log("lets get started with the chart operation");
-            //Step 1: Get current week, month and year values from glDatePicker
-            //Get dates for Current week
-             var date = new Date();
-             var current_date;
-             var week = [];
-             for (var i=0;i<7;i++){
-                 current_date = (date.getMonth() + 1 + "/" + (date.getDate()+i) + "/" + date.getFullYear());
+            var week = [582016, 592016, 5102016, 5112016, 5122016, 5132016, 5142016];
+            /*
+            var date = new Date();
+            var current_date = (date.getMonth() + 1) +"-" + date.getDate() + "-" + date.getFullYear();
 
-                 week.push(current_date);
+            var curr = new Date(current_date);
+            var week = [];
 
-             }
-             console.log(week);
+            function calculateDate(){
+                for (var i = 0; i<7;i++){
+                var first = curr.getDate() - curr.getDay();
+                var next_day = first + i;
+
+                var calc_date = new Date(curr.setDate(next_day));
+                calc_date = (calc_date.getMonth() + 1) +"-" + calc_date.getDate() + "-" + calc_date.getFullYear();
+                week.push(calc_date);
+
+                }
+            }
+
+            calculateDate(curr);
+            console.log(week);*/
             //How to get data from Firebase for this weeks data
-           /*
-            var ref = new Firebase("https://fiery-inferno-4707.firebaseio.com/5102016");
-            // Attach an asynchronous callback to read the data at our posts reference
-            ref.on("value", function(snapshot) {
-                console.log(snapshot.val());
-            }, function(errorObject) {
-                console.log("The read failed: " + errorObject.code);
-            }); */
+            var xaxis = [];
+            for (var i = 0; i < 7; i++) {
+                var total_day_calories = 0;
+                var ref = new Firebase("https://fiery-inferno-4707.firebaseio.com/" + week[i]);
+
+                // Attach an asynchronous callback to read the data at our posts reference
+                ref.on("value", function(snapshot) {
+                    snapshot.forEach(function(childSnapshot) {
+                        // childData will be the actual contents of the child
+                        console.log(childSnapshot.val());
+                        var childData = childSnapshot.val().total_calories;
+                        total_day_calories = total_day_calories + childData;
+
+                    });
+                    xaxis.push(total_day_calories);
+                }, function(errorObject) {
+                    console.log("The read failed: " + errorObject.code);
+                });
+            }
+
+            console.log(xaxis);
+
 
         }
 
