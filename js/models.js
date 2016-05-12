@@ -6,10 +6,11 @@ var app = app || {};
         defaults: {
             item_name: '',
             brand_name: '',
-            calories: '',
+            calories: 0,
             item_id:'',
-            servings: '',
-            date: ''
+            servings: 0,
+            date: '',
+            total_calories: ''
 
 
         },
