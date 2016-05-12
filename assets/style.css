@@ -54,16 +54,17 @@ width: 100%;
 
 .features {
 
-	width: 220px;
+	width: 100px;
 	margin: 20px auto;
-
 	font-size: 16px;
 }
 
-#chart {
+.calories {
 
-	margin-right: 29px;
+	text-align: center;
 }
+
+
 /* jQuery UI Autocomplete
 ---------------------------*/
 
