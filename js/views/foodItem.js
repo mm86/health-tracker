@@ -9,6 +9,7 @@ var app = app || {};
 
         render: function() {
             console.log("inside foodrecord");
+            console.log(this.model.attributes);
             this.$el.html(this.template(this.model.attributes));
             return this;
         },

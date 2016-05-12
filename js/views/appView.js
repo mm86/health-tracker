@@ -78,7 +78,8 @@ var app = app || {};
                                             item_name: item.fields.item_name,
                                             item_id: item.fields.item_id,
                                             brand_name: item.fields.brand_name,
-                                            calories: item.fields.nf_calories
+                                            calories: item.fields.nf_calories,
+
 
                                         }
                                     }));
