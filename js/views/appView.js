@@ -7,42 +7,41 @@ var app = app || {};
     app.AppView = Backbone.View.extend({
 
         el: '#healthtracker',
+        //Underscore's template to display the total calories for the day
         template: _.template($('#total-calorie-template').html()),
 
         initialize: function() {
             console.log("inside initialize");
 
             var self = this;
-
-            var date = new Date();
-            var current_date = (date.getMonth() + 1 + "/" + date.getDate() + "/" + date.getFullYear());
-
-            this.input = this.$('#user-input');
-            this.servings = $("#servings");
+            this.date = new Date();
+            this.current_date = (this.date.getMonth() + 1 + "/" + this.date.getDate() + "/" + this.date.getFullYear());
+            this.$input = this.$('#user-input');
+            this.servings = this.$("#servings");
+            this.$list = this.$("#foodRecords");
             this.total_calories = 0;
             this.records;
-            this.$list = $("#foodRecords");
             $("#date").glDatePicker({
-                //upon instantiation, let's tell it that:
                 onClick: (function(el, cell, date, data) {
-                    //give me the chosen date
                     el.val(date.toLocaleDateString());
+                    //every time a new date is chosen from the calendar, render function is called to add/fetch/display records for the chosen date.
                     self.render();
                 }),
 
             });
-
-            $("#date").val(current_date);
+            //set today's date as the default value for the calendar box
+            $("#date").val(this.current_date);
+            //once the page loads, call render. Render will fetch and display records from Firebase for today's date , if any.
             this.render();
 
         },
 
         events: {
 
-            'click #add-food': 'addFood',
-            'click #chart': 'calculateChart',
-            'keydown #user-input': 'autoSearch',
-            'change #date': 'render'
+            'click #add-food': 'addFood', //call addFood function when "add food" button is clicked
+            'click #chart': 'calculateChart', //display chart for the week/month when the chart button is clicked
+            'keydown #user-input': 'autoSearch', //start search when a character is entered in the input box
+            'change #date': 'render' //call render function when date is changed by the user
 
         },
 
@@ -131,7 +130,7 @@ var app = app || {};
                 return;
             };
             this.foodCollection.create(this.newAttributes());
-            this.input.val('');
+            this.$input.val('');
             // this.render();
         },
 
