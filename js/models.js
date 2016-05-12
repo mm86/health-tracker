@@ -1,13 +1,13 @@
 var app = app || {};
 
-(function () {
+(function() {
     'use strict';
     app.FoodItem = Backbone.Model.extend({
         defaults: {
             item_name: '',
             brand_name: '',
             calories: 0,
-            item_id:'',
+            item_id: '',
             servings: 0,
             date: '',
             total_calories: ''
