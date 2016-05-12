@@ -240,9 +240,9 @@ var app = app || {};
 
         displayChart: function(xaxis, week) {
             $(".chart").animate({ width: 'toggle' });
-            $('#closeButton').click(function () {
-     this.parentNode.style.display = 'none';
- });
+            $('#closeButton').click(function() {
+                this.parentNode.style.display = 'none';
+            });
             var ctx = document.getElementById("displayChart");
             var myChart = new Chart(ctx, {
                 type: 'line',

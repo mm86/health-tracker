@@ -22,10 +22,8 @@ var app = app || {};
         },
 
         clear: function() {
-          this.model.destroy(); //Leads to xml http request not allowed error
+            this.model.destroy(); //Leads to xml http request not allowed error
 
         }
     });
 })(jQuery);
-
-
