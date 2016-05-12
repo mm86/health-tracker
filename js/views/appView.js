@@ -174,7 +174,7 @@ var app = app || {};
 
 
 
-            
+
             /*
             var date = new Date();
             var current_date = (date.getMonth() + 1) +"-" + date.getDate() + "-" + date.getFullYear();
@@ -199,34 +199,50 @@ var app = app || {};
             //How to get data from Firebase for this weeks data
 
             var xaxis = [];
-            var week = ["https://fiery-inferno-4707.firebaseio.com/582016", "https://fiery-inferno-4707.firebaseio.com/592016", 
-            "https://fiery-inferno-4707.firebaseio.com/5102016"];
-            for (var i = 0; i < 3; i++) {
+            var yaxis = [0, 100, 200, 150, 0, 0, 0];
+            var week = ["582016", "592016", "5102016", "5112016", "5122016", "5132016", "5142016"];
 
-                var total_day_calories = 0;
-                var ref = new Firebase(week[i]);
+            var self = this;
+            var ref = new Firebase("https://fiery-inferno-4707.firebaseio.com/");
 
-                ref.once('value').then(function(snapshot){
 
-                    snapshot.forEach(function(childSnapshot) {
+            ref.once('value').then(function(snapshot) {
+                for (var i = 0; i < 7; i++) {
+                    var total_day_calories = 0;
+                    console.log(snapshot.child(week[i]).val());
+                    if (snapshot.child(week[i]).val() == null) {
+                        console.log("inside null");
+                        xaxis.push(0);
+                    } else {
+                        snapshot.child(week[i]).forEach(function(childSnapshot) {
 
-                        var childData = childSnapshot.val().total_calories;
-                        total_day_calories = total_day_calories + childData;
+                            var childData = childSnapshot.val().total_calories;
+                            total_day_calories = total_day_calories + childData;
 
-                    });
+                        });
 
-                    xaxis.push(total_day_calories);
-                    console.log(xaxis);
-                }, function(errorObject) {
-                    console.log("The read failed: " + errorObject.code);
-                });
+                        xaxis.push(total_day_calories);
 
-           }
+                    }
+                    if (i === 6) {
+                        console.log(xaxis);
+                        self.displayChart(xaxis, week);
+                    }
+                }
+            }, function(errorObject) {
+                console.log("The read failed: " + errorObject.code);
+            });
+
+
+
 
         },
-/*
-        displayChart: function(xaxis,week){
-   $("#displayChart").animate({ width: 'toggle' });
+
+        displayChart: function(xaxis, week) {
+            $(".chart").animate({ width: 'toggle' });
+            $('#closeButton').click(function () {
+     this.parentNode.style.display = 'none';
+ });
             var ctx = document.getElementById("displayChart");
             var myChart = new Chart(ctx, {
                 type: 'line',
@@ -249,7 +265,7 @@ var app = app || {};
             });
 
         }
-*/
+
 
     });
 
