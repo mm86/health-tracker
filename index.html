@@ -40,7 +40,7 @@
                 <input type="submit" value="Display Chart" id="chart">
             </div>
             <p class="calories">Total calories for the day:
-                        <label id="total-calories"></label>
+                <label id="total-calories"></label>
             </p>
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -48,12 +48,15 @@
                 </div>
                 <div class="panel-body">
                     <ul id="foodRecords"></ul>
-                    
                 </div>
             </div>
         </div>
     </section>
-    <canvas id="displayChart"></canvas>
+    <div class="chart">
+        <button id="closeButton">close</button>
+        <canvas id="displayChart"></canvas>
+    </div>
+
     <!-- Templates -->
     <script type="text/template" id="item-template">
         <div class="view">
@@ -76,6 +79,8 @@
             </label>
         </div>
     </script>
+
+
     <!-- Libraries and Dependencies-->
     <!-- ========= -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
@@ -87,6 +92,7 @@
     <script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
     <script src="https://cdn.firebase.com/libs/backbonefire/0.5.1/backbonefire.min.js"></script>
     <script src="js/datePicker/glDatePicker.min.js"></script>
+
     <!-- Javascript -->
     <!-- ========= -->
     <script src="js/models.js"></script>
