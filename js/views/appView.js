@@ -20,7 +20,7 @@ var app = app || {};
             this.servings = this.$("#servings");
             this.$list = this.$("#foodRecords");
             this.total_calories = 0;
-            this.records;
+            self.records;
             $("#date").glDatePicker({
                 onClick: (function(el, cell, date, data) {
                     el.val(date.toLocaleDateString());
@@ -92,16 +92,17 @@ var app = app || {};
 
                         },
                         error: function() {
-                            alert("Oops, something went wrong!");
+                            alert("Oops, something went wrong with jQuery's Autocomplete widget!");
                         },
 
                     })
 
                 },
-                minLength: 1,
+                minLength: 1,//start search with character length 1
                 select: function(event, ui) {
-
-                    records = ui.item;
+                    //save the item chosen from the API to records variable
+                    self.records = ui.item;
+                    console.log(self.records);
                 }
             });
         },
@@ -127,7 +128,7 @@ var app = app || {};
         //called when an item is added and the add-food button is clicked
         addFood: function() {
             console.log("inside addFood");
-            if (this.input.val() == '') {
+            if (this.$input.val() == '') {
                 return;
             };
             this.foodCollection.create(this.newAttributes());
@@ -138,13 +139,13 @@ var app = app || {};
         newAttributes: function() {
             console.log("inside newAttributes");
             return {
-                item_name: records.item_name,
-                brand_name: records.brand_name,
-                calories: records.calories,
-                item_id: records.item_id,
+                item_name: self.records.item_name,
+                brand_name: self.records.brand_name,
+                calories: self.records.calories,
+                item_id: self.records.item_id,
                 servings: this.servings.val(),
                 date: this.model_date,
-                total_calories: records.calories * this.servings.val()
+                total_calories: self.records.calories * this.servings.val()
 
             }
         },
