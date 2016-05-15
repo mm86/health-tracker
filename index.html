@@ -15,7 +15,7 @@
                 <span class="input-group-addon input-header">Search Nutritionix API</span>
                 <input class="col-sm-12 form-control" id="user-input" placeholder="Enter search term">
             </div>
-            <div class="servings">
+            <div class="servings_add">
                 <select id="servings">
                     <option value="Servings">Servings</option>
                     <option value="1">1</option>
@@ -29,15 +29,13 @@
                     <option value="9">9</option>
                     <option value="10">10</option>
                 </select>
-                <input type="submit" value="Add Food" id="add-food">
+                <input type="submit" value="Add Food" class="btn btn-sm" id="add-food">
             </div>
             <div class="calendar">
                 <input type="text" id="date" gldp-id="date" />
-                <div gldp-el="date" style="width:400px; height:300px; position:absolute; top:70px; left:100px;">
-                </div>
             </div>
             <div class="features">
-                <input type="submit" value="Display Chart" id="chart">
+                <input type="submit" class="btn btn-lg" value="Display Chart" id="chart">
             </div>
             <p class="calories">Total calories for the day:
                 <label id="total-calories"></label>
