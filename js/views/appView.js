@@ -110,7 +110,7 @@ var app = app || {};
 
         render: function() {
             console.log("inside render");
-            this.list.html('');
+            this.$list.html('');
             var self = this;
             this.model_date = $("#date").val();
             this.dateUrl = "https://fiery-inferno-4707.firebaseio.com/" + this.model_date.replace(/\//g, '');
@@ -125,12 +125,12 @@ var app = app || {};
 
         addFood: function() {
             console.log("inside addFood");
-            if (this.input.val() == '') {
+            if (this.$input.val() == '') {
                 return;
             };
             this.foodCollection.create(this.newAttributes());
             var food = this.foodCollection.models.length;
-            this.input.val('');
+            this.$input.val('');
 
 
         },
@@ -141,7 +141,7 @@ var app = app || {};
             console.log("inside displayFood");
             var self = this;
             var view = new app.FoodRecords({ model: food });
-            this.list.append(view.render().el);
+            this.$list.append(view.render().el);
             this.foodCollection.fetch({
                 success: function(data) {
                     self.renderTotal();
@@ -172,7 +172,7 @@ var app = app || {};
             console.log("inside iterateFood");
             var self = this;
             console.log(this.foodCollection);
-            this.list.html('');
+            this.$list.html('');
             this.foodCollection.fetch({
                 success: function(data) {
                     self.renderTotal();
