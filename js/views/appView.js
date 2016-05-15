@@ -34,6 +34,7 @@ var app = app || {};
             //once the page loads, call render. Render will fetch and display records from Firebase for today's date , if any.
             this.render();
 
+
         },
 
         events: {
@@ -41,7 +42,7 @@ var app = app || {};
             'click #add-food': 'addFood', //call addFood function when "add food" button is clicked
             'click #chart': 'calculateChart', //display chart for the week/month when the chart button is clicked
             'keydown #user-input': 'autoSearch', //start search when a character is entered in the input box
-            'change #date': 'render' //call render function when date is changed by the user
+            'change #date': 'updateFoodList' //call render function when date is changed by the user
 
         },
 
@@ -98,7 +99,7 @@ var app = app || {};
                     })
 
                 },
-                minLength: 1,//start search with character length 1
+                minLength: 1, //start search with character length 1
                 select: function(event, ui) {
                     //save the item chosen from the API to records variable
                     self.records = ui.item;
@@ -109,33 +110,82 @@ var app = app || {};
 
         render: function() {
             console.log("inside render");
+            this.list.html('');
             var self = this;
             this.model_date = $("#date").val();
-
             this.dateUrl = "https://fiery-inferno-4707.firebaseio.com/" + this.model_date.replace(/\//g, '');
-            console.log(this.dateUrl);
             this.foodCollection = new app.FoodCollection([], { url: this.dateUrl });
-            this.listenTo(this.foodCollection, 'add', this.render);
-            this.listenTo(this.foodCollection, 'all', this.renderTotal);
-            this.$list.html('');
-            this.foodCollection.each(function(food) {
-                console.log("iterating over foodCollection");
-                var view = new app.FoodRecords({ model: food });
-                self.$list.append(view.render().el);
-            });
+            this.listenTo(this.foodCollection, 'add', this.displayFood);
+            this.listenTo(this.foodCollection, 'remove', this.iterateFood);
+            this.renderTotal();
+            return this;
         },
 
-        //called when an item is added and the add-food button is clicked
+
+
         addFood: function() {
             console.log("inside addFood");
-            if (this.$input.val() == '') {
+            if (this.input.val() == '') {
                 return;
             };
             this.foodCollection.create(this.newAttributes());
-            this.$input.val('');
-            // this.render();
+            var food = this.foodCollection.models.length;
+            this.input.val('');
+
+
         },
 
+
+        displayFood: function(food) {
+
+            console.log("inside displayFood");
+            var self = this;
+            var view = new app.FoodRecords({ model: food });
+            this.list.append(view.render().el);
+            this.foodCollection.fetch({
+                success: function(data) {
+                    self.renderTotal();
+                }
+            });
+
+        },
+
+        updateFoodList: function() {
+            var self = this;
+            this.model_date = $("#mydate").val();
+            this.dateUrl = "https://fiery-inferno-4707.firebaseio.com/" + this.model_date.replace(/\//g, '');
+            var ref = new Firebase(this.dateUrl);
+            ref.once("value", function(snapshot) {
+                var a = snapshot.exists();
+                console.log(a);
+                if (a === false) {
+                    self.render();
+                } else {
+                    self.foodCollection = new app.FoodCollection([], { url: self.dateUrl });
+                    self.iterateFood();
+
+                }
+            });
+        },
+
+        iterateFood: function() {
+            console.log("inside iterateFood");
+            var self = this;
+            console.log(this.foodCollection);
+            this.list.html('');
+            this.foodCollection.fetch({
+                success: function(data) {
+                    self.renderTotal();
+                    data.each(function(food) {
+                        console.log("iterating over foodCollection");
+                        var view = new app.FoodRecords({ model: food });
+                        $('#foodRecords').append(view.render().el);
+                    });
+                }
+            });
+
+
+        },
         newAttributes: function() {
             console.log("inside newAttributes");
             return {
