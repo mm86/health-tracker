@@ -227,33 +227,32 @@ var app = app || {};
 
 
 
-            
+
             var date = new Date();
-            var current_date = (date.getMonth() + 1) +"-" + date.getDate() + "-" + date.getFullYear();
+            var current_date = (date.getMonth() + 1) + "-" + date.getDate() + "-" + date.getFullYear();
 
             var curr = new Date(current_date);
             var week = [];
 
-            function calculateDate(){
-                for (var i = 0; i<7;i++){
-                var first = curr.getDate() - curr.getDay();
-                var next_day = first + i;
+            function calculateDate() {
+                for (var i = 0; i < 7; i++) {
+                    var first = curr.getDate() - curr.getDay();
+                    var next_day = first + i;
 
-                var calc_date = new Date(curr.setDate(next_day));
-                calc_date = (calc_date.getMonth() + 1) + calc_date.getDate()  + calc_date.getFullYear();
-                console.log(calc_date);
-                week.push(calc_date);
+                    var calc_date = new Date(curr.setDate(next_day));
+                    calc_date = (calc_date.getMonth() + 1) + "" + calc_date.getDate() + "" + calc_date.getFullYear();
+                    console.log(calc_date);
+                    week.push(calc_date);
 
                 }
             }
 
             calculateDate(curr);
             console.log(week);
-          
+
 
             var xaxis = [];
-            var yaxis = [0, 100, 200, 150, 0, 0, 0];
-           // var week = ["582016", "592016", "5102016", "5112016", "5122016", "5132016", "5142016"];
+
 
             var self = this;
             var ref = new Firebase("https://fiery-inferno-4707.firebaseio.com/");
@@ -303,7 +302,6 @@ var app = app || {};
                     datasets: [{
 
                         label: '# of Calories',
-                        backgroundColor: "#00BFFF",
                         borderColor: "#1E90FF",
                         data: xaxis,
 
