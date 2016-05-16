@@ -25,7 +25,7 @@ var app = app || {};
                 onClick: (function(el, cell, date, data) {
                     el.val(date.toLocaleDateString());
                     //every time a new date is chosen from the calendar, render function is called to add/fetch/display records for the chosen date.
-                    self.render();
+                    self.updateFoodList();
                 }),
 
             });
@@ -42,7 +42,7 @@ var app = app || {};
             'click #add-food': 'addFood', //call addFood function when "add food" button is clicked
             'click #chart': 'calculateChart', //display chart for the week/month when the chart button is clicked
             'keydown #user-input': 'autoSearch', //start search when a character is entered in the input box
-            'change #date': 'updateFoodList' //call render function when date is changed by the user
+           // 'change #date': 'updateFoodList' //call render function when date is changed by the user
 
         },
 
@@ -93,7 +93,7 @@ var app = app || {};
 
                         },
                         error: function() {
-                            alert("Oops, something went wrong with jQuery's Autocomplete widget!");
+                            alert("Oops, something went wrong with Nutritionix API");
                         },
 
                     })
@@ -151,8 +151,9 @@ var app = app || {};
         },
 
         updateFoodList: function() {
+            console.log("inside updateFoodList");
             var self = this;
-            this.model_date = $("#mydate").val();
+            this.model_date = $("#date").val();
             this.dateUrl = "https://fiery-inferno-4707.firebaseio.com/" + this.model_date.replace(/\//g, '');
             var ref = new Firebase(this.dateUrl);
             ref.once("value", function(snapshot) {
@@ -283,9 +284,6 @@ var app = app || {};
             }, function(errorObject) {
                 console.log("The read failed: " + errorObject.code);
             });
-
-
-
 
         },
 
