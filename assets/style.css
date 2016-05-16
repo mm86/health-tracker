@@ -160,11 +160,22 @@ body {
     top: 0;
     right: 0;
     width: 50% !important;
-    background: lightblue;
+    background: #F8F8F8;
     height: 100% !important;
     z-index: 100;
+
 }
 
+#displayChart {
+
+	margin-top: 20%;
+}
+.chart span{
+
+	color: #000;
+	font-size: 20px;
+	padding: 10px;
+}
 #closeButton {
     position: absolute;
     top: 0;

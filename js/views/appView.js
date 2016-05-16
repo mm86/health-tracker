@@ -42,7 +42,7 @@ var app = app || {};
             'click #add-food': 'addFood', //call addFood function when "add food" button is clicked
             'click #chart': 'calculateChart', //display chart for the week/month when the chart button is clicked
             'keydown #user-input': 'autoSearch', //start search when a character is entered in the input box
-           // 'change #date': 'updateFoodList' //call render function when date is changed by the user
+            // 'change #date': 'updateFoodList' //call render function when date is changed by the user
 
         },
 
@@ -227,7 +227,7 @@ var app = app || {};
 
 
 
-            /*
+            
             var date = new Date();
             var current_date = (date.getMonth() + 1) +"-" + date.getDate() + "-" + date.getFullYear();
 
@@ -240,19 +240,20 @@ var app = app || {};
                 var next_day = first + i;
 
                 var calc_date = new Date(curr.setDate(next_day));
-                calc_date = (calc_date.getMonth() + 1) +"-" + calc_date.getDate() + "-" + calc_date.getFullYear();
+                calc_date = (calc_date.getMonth() + 1) + calc_date.getDate()  + calc_date.getFullYear();
+                console.log(calc_date);
                 week.push(calc_date);
 
                 }
             }
 
             calculateDate(curr);
-            console.log(week);*/
-            //How to get data from Firebase for this weeks data
+            console.log(week);
+          
 
             var xaxis = [];
             var yaxis = [0, 100, 200, 150, 0, 0, 0];
-            var week = ["582016", "592016", "5102016", "5112016", "5122016", "5132016", "5142016"];
+           // var week = ["582016", "592016", "5102016", "5112016", "5122016", "5132016", "5142016"];
 
             var self = this;
             var ref = new Firebase("https://fiery-inferno-4707.firebaseio.com/");
@@ -295,11 +296,17 @@ var app = app || {};
             var ctx = document.getElementById("displayChart");
             var myChart = new Chart(ctx, {
                 type: 'line',
+
+
                 data: {
                     labels: week,
                     datasets: [{
-                        label: 'Weekly',
-                        data: xaxis
+
+                        label: '# of Calories',
+                        backgroundColor: "#00BFFF",
+                        borderColor: "#1E90FF",
+                        data: xaxis,
+
                     }]
                 },
                 options: {
