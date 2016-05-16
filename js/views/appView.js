@@ -24,14 +24,14 @@ var app = app || {};
             $("#date").glDatePicker({
                 onClick: (function(el, cell, date, data) {
                     el.val(date.toLocaleDateString());
-                    //every time a new date is chosen from the calendar, render function is called to add/fetch/display records for the chosen date.
+                    //every time a new date is chosen from the calendar, updateFoodList function is called to to display records for the chosen date.
                     self.updateFoodList();
                 }),
 
             });
             //set today's date as the default value for the calendar box
             $("#date").val(this.current_date);
-            //once the page loads, call render. Render will fetch and display records from Firebase for today's date , if any.
+            //once the page loads, call render.
             this.render();
 
 
@@ -42,19 +42,19 @@ var app = app || {};
             'click #add-food': 'addFood', //call addFood function when "add food" button is clicked
             'click #chart': 'calculateChart', //display chart for the week/month when the chart button is clicked
             'keydown #user-input': 'autoSearch', //start search when a character is entered in the input box
-            // 'change #date': 'updateFoodList' //call render function when date is changed by the user
 
         },
 
+        //jQuery's autosearch widget
         autoSearch: function() {
             console.log("inside autosearch");
             $("#user-input").autocomplete({
                 delay: 100,
                 source: function(request, response) {
 
-                    // Suggest URL
-                    var suggestURL = "https://api.nutritionix.com/v1_1/search/%QUERY?results=0:10&fields=item_name,brand_name,item_id,nf_calories&appId=41324021&appKey=b16be109bec67fb1282c4b4559e8666f";
-                    suggestURL = suggestURL.replace('%QUERY', request.term);
+                    // Nutrition URL API call
+                    var nutritionURL = "https://api.nutritionix.com/v1_1/search/%QUERY?results=0:10&fields=item_name,brand_name,item_id,nf_calories&appId=41324021&appKey=b16be109bec67fb1282c4b4559e8666f";
+                    nutritionURL = nutritionURL.replace('%QUERY', request.term);
 
                     // JSONP Request
                     $.ajax({
@@ -101,13 +101,14 @@ var app = app || {};
                 },
                 minLength: 1, //start search with character length 1
                 select: function(event, ui) {
-                    //save the item chosen from the API to records variable
+                    //save the item chosen from the API to var records
                     self.records = ui.item;
                     console.log(self.records);
                 }
             });
         },
 
+        //gets the current date and creates a new collection for the date and add event listeners to the collection
         render: function() {
             console.log("inside render");
             this.$list.html('');
@@ -122,7 +123,8 @@ var app = app || {};
         },
 
 
-
+        //this function is called every time the add-food button is clicked
+        //function creates a new model within the collection
         addFood: function() {
             console.log("inside addFood");
             if (this.$input.val() == '') {
@@ -132,16 +134,16 @@ var app = app || {};
             var food = this.foodCollection.models.length;
             this.$input.val('');
 
-
         },
 
-
+        //displays the item added to the collection
         displayFood: function(food) {
 
             console.log("inside displayFood");
             var self = this;
             var view = new app.FoodRecords({ model: food });
             this.$list.append(view.render().el);
+            //re-calculate total number of calories
             this.foodCollection.fetch({
                 success: function(data) {
                     self.renderTotal();
@@ -150,6 +152,9 @@ var app = app || {};
 
         },
 
+        //function called when a new date is picked
+        //uses firebase's promises to check if a collection exists. If no, then call render and instantiate a new collection
+        //if collection already exists, then display the data.
         updateFoodList: function() {
             console.log("inside updateFoodList");
             var self = this;
@@ -169,6 +174,7 @@ var app = app || {};
             });
         },
 
+        //display items within a collection
         iterateFood: function() {
             console.log("inside iterateFood");
             var self = this;
@@ -185,8 +191,9 @@ var app = app || {};
                 }
             });
 
-
         },
+
+        //create data within collection
         newAttributes: function() {
             console.log("inside newAttributes");
             return {
@@ -201,6 +208,7 @@ var app = app || {};
             }
         },
 
+        //caluclate total calories consumed for the day
         renderTotal: function() {
             console.log("inside renderTotal");
             var cals = 0;
@@ -223,40 +231,27 @@ var app = app || {};
 
         calculateChart: function() {
             console.log("lets get started with the chart operation");
-
-
-
-
-
+            var self = this;
             var date = new Date();
             var current_date = (date.getMonth() + 1) + "-" + date.getDate() + "-" + date.getFullYear();
 
             var curr = new Date(current_date);
             var week = [];
 
-            function calculateDate() {
-                for (var i = 0; i < 7; i++) {
-                    var first = curr.getDate() - curr.getDay();
-                    var next_day = first + i;
+            //week calculator
+            for (var i = 0; i < 7; i++) {
+                var first = curr.getDate() - curr.getDay();
+                var next_day = first + i;
 
-                    var calc_date = new Date(curr.setDate(next_day));
-                    calc_date = (calc_date.getMonth() + 1) + "" + calc_date.getDate() + "" + calc_date.getFullYear();
-                    console.log(calc_date);
-                    week.push(calc_date);
+                var calc_date = new Date(curr.setDate(next_day));
+                calc_date = (calc_date.getMonth() + 1) + "" + calc_date.getDate() + "" + calc_date.getFullYear();
+                console.log(calc_date);
+                week.push(calc_date);
 
-                }
             }
 
-            calculateDate(curr);
-            console.log(week);
-
-
             var xaxis = [];
-
-
-            var self = this;
             var ref = new Firebase("https://fiery-inferno-4707.firebaseio.com/");
-
 
             ref.once('value').then(function(snapshot) {
                 for (var i = 0; i < 7; i++) {
@@ -276,11 +271,9 @@ var app = app || {};
                         xaxis.push(total_day_calories);
 
                     }
-                    if (i === 6) {
-                        console.log(xaxis);
-                        self.displayChart(xaxis, week);
-                    }
+
                 }
+                self.displayChart(xaxis, week);
             }, function(errorObject) {
                 console.log("The read failed: " + errorObject.code);
             });
@@ -295,8 +288,6 @@ var app = app || {};
             var ctx = document.getElementById("displayChart");
             var myChart = new Chart(ctx, {
                 type: 'line',
-
-
                 data: {
                     labels: week,
                     datasets: [{
