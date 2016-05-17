@@ -20,7 +20,7 @@ var app = app || {};
             this.servings = this.$("#servings");
             this.$list = this.$("#foodRecords");
             this.total_calories = 0;
-            self.records;
+            this.records;
             $("#date").glDatePicker({
                 onClick: (function(el, cell, date, data) {
                     el.val(date.toLocaleDateString());
@@ -60,7 +60,7 @@ var app = app || {};
                     $.ajax({
                         method: 'GET',
                         dataType: 'json',
-                        url: suggestURL,
+                        url: nutritionURL,
                         data: JSON.stringify({
                             item_name: "",
                             brand_name: "",
@@ -111,8 +111,8 @@ var app = app || {};
         //gets the current date and creates a new collection for the date and add event listeners to the collection
         render: function() {
             console.log("inside render");
-            this.$list.html('');
             var self = this;
+            this.$list.html('');
             this.model_date = $("#date").val();
             this.dateUrl = "https://fiery-inferno-4707.firebaseio.com/" + this.model_date.replace(/\//g, '');
             this.foodCollection = new app.FoodCollection([], { url: this.dateUrl });
