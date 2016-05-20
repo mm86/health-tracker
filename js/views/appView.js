@@ -68,8 +68,12 @@ var app = app || {};
                             calories: ""
 
                         }),
+                        beforeSend: function() {
+                            $(".loading").show();
+                            console.log("loading");
+                        },
                         success: function(data) {
-
+                            $(".loading").hide();
                             if (data.hits.length != 0) {
                                 for (i = 0; i < data.hits.length; i++) {
                                     response($.map(data.hits, function(item) {
