@@ -87,7 +87,7 @@ body {
     margin-left: 10px;
 }
 
-.foodRecords li label {
+.foodRecords label {
     font-weight: normal;
     color: #000;
 }
