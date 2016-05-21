@@ -11,16 +11,14 @@ app.AppView = Backbone.View.extend({
             template: _.template($('.total-calorie-template').html()),
 
             initialize: function() {
-                console.log("inside initialize");
-
                 var self = this;
-                this.date = new Date();
-                this.current_date = (this.date.getMonth() + 1 + "/" + this.date.getDate() + "/" + this.date.getFullYear());
-                this.$input = this.$('.user-input');
-                this.servings = this.$(".servings");
-                this.$list = this.$(".foodRecords");
-                this.total_calories = 0;
-                this.records;
+                self.date = new Date();
+                self.current_date = (self.date.getMonth() + 1 + "/" + self.date.getDate() + "/" + self.date.getFullYear());
+                self.$input = self.$('.user-input');
+                self.$servings = self.$(".servings");
+                self.$list = self.$(".foodRecords");
+                self.total_calories = 0;
+                self.records;
                 $(".date").glDatePicker({
                     onClick: (function(el, cell, date, data) {
                         el.val(date.toLocaleDateString());
@@ -30,9 +28,9 @@ app.AppView = Backbone.View.extend({
 
                 });
                 //set today's date as the default value for the calendar box
-                $(".date").val(this.current_date);
+                $(".date").val(self.current_date);
                 //once the page loads, call render.
-                this.render();
+                self.render();
 
             },
 
@@ -46,7 +44,6 @@ app.AppView = Backbone.View.extend({
 
             //jQuery's autosearch widget
             autoSearch: function() {
-                console.log("inside autosearch");
                 $(".user-input").autocomplete({
                             delay: 100,
                             source: function(request, response) {
@@ -69,7 +66,6 @@ app.AppView = Backbone.View.extend({
                                     }),
                                     beforeSend: function() {
                                         $(".loading").show();
-                                        console.log("loading");
                                     },
                                 }).done(function(data) {
                                     $(".loading").hide();
@@ -103,48 +99,44 @@ app.AppView = Backbone.View.extend({
                     select: function(event, ui) {
                         //save the item chosen from the API to var records
                         self.records = ui.item;
-                        console.log(self.records);
                     }
             });
     },
 
     //gets the current date and creates a new collection for the date and add event listeners to the collection
     render: function() {
-        console.log("inside render");
         var self = this;
-        this.$list.html('');
-        this.model_date = $(".date").val();
-        this.dateUrl = "https://fiery-inferno-4707.firebaseio.com/" + this.model_date.replace(/\//g, '');
-        this.foodCollection = new app.FoodCollection([], { url: this.dateUrl });
-        this.listenTo(this.foodCollection, 'add', this.displayFood);
-        this.listenTo(this.foodCollection, 'remove', this.iterateFood);
-        this.renderTotal();
-        return this;
+        self.$list.html('');
+        self.model_date = $(".date").val();
+        self.dateUrl = "https://fiery-inferno-4707.firebaseio.com/" + self.model_date.replace(/\//g, '');
+        self.foodCollection = new app.FoodCollection([], { url: self.dateUrl });
+        self.listenTo(self.foodCollection, 'add', self.displayFood);
+        self.listenTo(self.foodCollection, 'remove', self.iterateFood);
+        self.renderTotal();
+        return self;
     },
 
 
-    //this function is called every time the add-food button is clicked
+    //self function is called every time the add-food button is clicked
     //function creates a new model within the collection
     addFood: function() {
-        console.log("inside addFood");
-        if (this.$input.val() == '') {
+        var self = this;
+        if (self.$input.val() == '') {
             return;
         };
-        this.foodCollection.create(this.newAttributes());
-        var food = this.foodCollection.models.length;
-        this.$input.val('');
+        self.foodCollection.create(self.newAttributes());
+        self.food = self.foodCollection.models.length;
+        self.$input.val('');
 
     },
 
     //displays the item added to the collection
     displayFood: function(food) {
-
-        console.log("inside displayFood");
         var self = this;
-        var view = new app.FoodRecords({ model: food });
-        this.$list.append(view.render().el);
+        self.view = new app.FoodRecords({ model: food });
+        self.$list.append(self.view.render().el);
         //re-calculate total number of calories
-        this.foodCollection.fetch({
+        self.foodCollection.fetch({
             success: function(data) {
                 self.renderTotal();
             }
@@ -156,14 +148,12 @@ app.AppView = Backbone.View.extend({
     //uses firebase's promises to check if a collection exists. If no, then call render and instantiate a new collection
     //if collection already exists, then display the data.
     updateFoodList: function() {
-        console.log("inside updateFoodList");
         var self = this;
-        this.model_date = $(".date").val();
-        this.dateUrl = "https://fiery-inferno-4707.firebaseio.com/" + this.model_date.replace(/\//g, '');
-        var ref = new Firebase(this.dateUrl);
-        ref.once("value", function(snapshot) {
+        self.model_date = $(".date").val();
+        self.dateUrl = "https://fiery-inferno-4707.firebaseio.com/" + self.model_date.replace(/\//g, '');
+        self.ref = new Firebase(self.dateUrl);
+        self.ref.once("value", function(snapshot) {
             var a = snapshot.exists();
-            console.log(a);
             if (a === false) {
                 self.render();
             } else {
@@ -176,15 +166,12 @@ app.AppView = Backbone.View.extend({
 
     //display items within a collection
     iterateFood: function() {
-        console.log("inside iterateFood");
         var self = this;
-        console.log(this.foodCollection);
-        this.$list.html('');
-        this.foodCollection.fetch({
+        self.$list.html('');
+        self.foodCollection.fetch({
             success: function(data) {
                 self.renderTotal();
                 data.each(function(food) {
-                    console.log("iterating over foodCollection");
                     var view = new app.FoodRecords({ model: food });
                     $('.foodRecords').append(view.render().el);
                 });
@@ -195,85 +182,78 @@ app.AppView = Backbone.View.extend({
 
     //create data within collection
     newAttributes: function() {
-        console.log("inside newAttributes");
         return {
             item_name: self.records.item_name,
             brand_name: self.records.brand_name,
             calories: self.records.calories,
             item_id: self.records.item_id,
-            servings: this.servings.val(),
-            date: this.model_date,
-            total_calories: self.records.calories * this.servings.val()
+            servings: this.$servings.val(),
+            date: self.model_date,
+            total_calories: self.records.calories * this.$servings.val()
 
         }
     },
 
     //caluclate total calories consumed for the day
     renderTotal: function() {
-        console.log("inside renderTotal");
-        var cals = 0;
-        var servings = 0;
-        var item_cal = 0;
-        var total_calories = 0;
+        var self = this;
+        self.cals = 0;
+        self.servings = 0;
+        self.item_cal = 0;
+        self.total_calories = 0;
 
-        this.foodCollection.each(function(model) {
+        self.foodCollection.each(function(model) {
 
-            cals = model.get("calories");
-            num = model.get("servings");
-            item_cal = cals * num;
-            total_calories += item_cal;
-            return total_calories;
+            self.cals = model.get("calories");
+            self.num = model.get("servings");
+            self.item_cal = self.cals * self.num;
+            self.total_calories += self.item_cal;
+            return self.total_calories;
         });
 
-        $(".total-calories").html(this.template({ total_cals: total_calories }));
+        $(".total-calories").html(self.template({ total_cals: self.total_calories }));
 
     },
 
     calculateChart: function() {
-        console.log("lets get started with the chart operation");
         var self = this;
-        var date = new Date();
-        var current_date = (date.getMonth() + 1) + "-" + date.getDate() + "-" + date.getFullYear();
-
-        var curr = new Date(current_date);
-        var week = [];
+        self.date = new Date();
+        self.current_date = (self.date.getMonth() + 1) + "-" + self.date.getDate() + "-" + self.date.getFullYear();
+        self.curr = new Date(self.current_date);
+        self.week = [];
 
         //week calculator
         for (var i = 0; i < 7; i++) {
-            var first = curr.getDate() - curr.getDay();
-            var next_day = first + i;
-
-            var calc_date = new Date(curr.setDate(next_day));
-            calc_date = (calc_date.getMonth() + 1) + "" + calc_date.getDate() + "" + calc_date.getFullYear();
-            console.log(calc_date);
-            week.push(calc_date);
+            self.first = self.curr.getDate() - self.curr.getDay();
+            self.next_day = self.first + i;
+            self.calc_date = new Date(self.curr.setDate(self.next_day));
+            self.calc_date = (self.calc_date.getMonth() + 1) + "" + self.calc_date.getDate() + "" + self.calc_date.getFullYear();
+            self.week.push(self.calc_date);
 
         }
 
-        var xaxis = [];
-        var ref = new Firebase("https://fiery-inferno-4707.firebaseio.com/");
+        self.xaxis = [];
+        self.ref = new Firebase("https://fiery-inferno-4707.firebaseio.com/");
 
-        ref.once('value').then(function(snapshot) {
+        self.ref.once('value').then(function(snapshot) {
             for (var i = 0; i < 7; i++) {
-                var total_day_calories = 0;
-                console.log(snapshot.child(week[i]).val());
+                self.total_day_calories = 0;
                 if (snapshot.child(week[i]).val() == null) {
-                    console.log("inside null");
-                    xaxis.push(0);
+                    self.xaxis.push(0);
                 } else {
                     snapshot.child(week[i]).forEach(function(childSnapshot) {
 
-                        var childData = childSnapshot.val().total_calories;
-                        total_day_calories = total_day_calories + childData;
+                        self.childData = childSnapshot.val().total_calories;
+                        self.total_day_calories = self.total_day_calories + self.childData;
 
                     });
 
-                    xaxis.push(total_day_calories);
+                    self.xaxis.push(self.total_day_calories);
 
                 }
 
             }
-            self.displayChart(xaxis, week);
+            self.displayChart(self.xaxis, self.week);
         }, function(errorObject) {
             console.log("The read failed: " + errorObject.code);
         });
@@ -281,20 +261,21 @@ app.AppView = Backbone.View.extend({
     },
 
     displayChart: function(xaxis, week) {
+        var self = this;
         $(".chart").animate({ width: 'toggle' });
         $('.closeButton').click(function() {
-            this.parentNode.style.display = 'none';
+            self.parentNode.style.display = 'none';
         });
-        var ctx = document.getElementsByClassName("displayChart");
-        var myChart = new Chart(ctx, {
+        self.ctx = document.getElementsByClassName("displayChart");
+        self.myChart = new Chart(self.ctx, {
             type: 'line',
             data: {
-                labels: week,
+                labels: self.week,
                 datasets: [{
 
                     label: '# of Calories',
                     borderColor: "#1E90FF",
-                    data: xaxis,
+                    data: self.xaxis,
 
                 }]
             },
