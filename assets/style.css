@@ -109,7 +109,16 @@ body {
 .loading {
 
     display: none;
+
 }
+
+.loading img {
+
+    width: 20px;
+    height: 20px;
+}
+
+
 
 
 /* jQuery UI Autocomplete
