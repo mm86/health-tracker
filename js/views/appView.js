@@ -91,6 +91,7 @@ var app = app || {};
 
                                 }
                             } else {
+                                alert("No records match your search");
                                 response([]);
                             }
 
