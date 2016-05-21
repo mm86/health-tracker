@@ -123,8 +123,6 @@ body {
 }
 
 
-
-
 /* jQuery UI Autocomplete
 ---------------------------*/
 
@@ -180,4 +178,28 @@ body {
     position: absolute;
     top: 0;
     right: 0;
+}
+
+
+/* Media Queries
+---------------------------*/
+
+@media only screen and (max-width : 480px) {
+
+.input-group-addon {
+
+    display: none;
+}
+
+#search {
+
+    width: 100%;
+    margin: 0 auto;
+}
+#user-input {
+
+    text-align: center;
+
+}
+
 }
