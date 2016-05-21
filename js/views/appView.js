@@ -6,9 +6,9 @@ var app = app || {};
 
 app.AppView = Backbone.View.extend({
 
-            el: '#healthtracker',
+            el: '.healthtracker',
             //Underscore's template to display the total calories for the day
-            template: _.template($('#total-calorie-template').html()),
+            template: _.template($('.total-calorie-template').html()),
 
             initialize: function() {
                 console.log("inside initialize");
@@ -16,12 +16,12 @@ app.AppView = Backbone.View.extend({
                 var self = this;
                 this.date = new Date();
                 this.current_date = (this.date.getMonth() + 1 + "/" + this.date.getDate() + "/" + this.date.getFullYear());
-                this.$input = this.$('#user-input');
-                this.servings = this.$("#servings");
-                this.$list = this.$("#foodRecords");
+                this.$input = this.$('.user-input');
+                this.servings = this.$(".servings");
+                this.$list = this.$(".foodRecords");
                 this.total_calories = 0;
                 this.records;
-                $("#date").glDatePicker({
+                $(".date").glDatePicker({
                     onClick: (function(el, cell, date, data) {
                         el.val(date.toLocaleDateString());
                         //every time a new date is chosen from the calendar, updateFoodList function is called to to display records for the chosen date.
@@ -30,25 +30,24 @@ app.AppView = Backbone.View.extend({
 
                 });
                 //set today's date as the default value for the calendar box
-                $("#date").val(this.current_date);
+                $(".date").val(this.current_date);
                 //once the page loads, call render.
                 this.render();
-
 
             },
 
             events: {
 
-                'click #add-food': 'addFood', //call addFood function when "add food" button is clicked
-                'click #chart': 'calculateChart', //display chart for the week/month when the chart button is clicked
-                'keydown #user-input': 'autoSearch', //start search when a character is entered in the input box
+                'click .add-food': 'addFood', //call addFood function when "add food" button is clicked
+                'click .chart': 'calculateChart', //display chart for the week/month when the chart button is clicked
+                'keydown .user-input': 'autoSearch', //start search when a character is entered in the input box
 
             },
 
             //jQuery's autosearch widget
             autoSearch: function() {
                 console.log("inside autosearch");
-                $("#user-input").autocomplete({
+                $(".user-input").autocomplete({
                             delay: 100,
                             source: function(request, response) {
 
@@ -114,7 +113,7 @@ app.AppView = Backbone.View.extend({
         console.log("inside render");
         var self = this;
         this.$list.html('');
-        this.model_date = $("#date").val();
+        this.model_date = $(".date").val();
         this.dateUrl = "https://fiery-inferno-4707.firebaseio.com/" + this.model_date.replace(/\//g, '');
         this.foodCollection = new app.FoodCollection([], { url: this.dateUrl });
         this.listenTo(this.foodCollection, 'add', this.displayFood);
@@ -159,7 +158,7 @@ app.AppView = Backbone.View.extend({
     updateFoodList: function() {
         console.log("inside updateFoodList");
         var self = this;
-        this.model_date = $("#date").val();
+        this.model_date = $(".date").val();
         this.dateUrl = "https://fiery-inferno-4707.firebaseio.com/" + this.model_date.replace(/\//g, '');
         var ref = new Firebase(this.dateUrl);
         ref.once("value", function(snapshot) {
@@ -187,7 +186,7 @@ app.AppView = Backbone.View.extend({
                 data.each(function(food) {
                     console.log("iterating over foodCollection");
                     var view = new app.FoodRecords({ model: food });
-                    $('#foodRecords').append(view.render().el);
+                    $('.foodRecords').append(view.render().el);
                 });
             }
         });
@@ -226,7 +225,7 @@ app.AppView = Backbone.View.extend({
             return total_calories;
         });
 
-        $("#total-calories").html(this.template({ total_cals: total_calories }));
+        $(".total-calories").html(this.template({ total_cals: total_calories }));
 
     },
 
@@ -283,10 +282,10 @@ app.AppView = Backbone.View.extend({
 
     displayChart: function(xaxis, week) {
         $(".chart").animate({ width: 'toggle' });
-        $('#closeButton').click(function() {
+        $('.closeButton').click(function() {
             this.parentNode.style.display = 'none';
         });
-        var ctx = document.getElementById("displayChart");
+        var ctx = document.getElementsByClassName("displayChart");
         var myChart = new Chart(ctx, {
             type: 'line',
             data: {

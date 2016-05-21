@@ -11,18 +11,18 @@
 </head>
 
 <body>
-    <section id="healthtracker">
+    <section class="healthtracker">
         <div class="brand">HEALTH TRACKER</div>
         <div class="container main">
-            <div class="row input-group" id="search">
+            <div class="row input-group search">
                 <span class="input-group-addon input-header">Search Nutritionix API</span>
-                <input class="col-sm-12 form-control" id="user-input" placeholder="Enter search term">
+                <input class="col-sm-12 form-control user-input" placeholder="Enter search term">
             </div>
             <div class="loading">
                 <img src="assets/ajax-loader.gif"/>
             </div>
-            <div class="servings_add">
-                <select id="servings">
+            <div class="servings-add">
+                <select class="servings">
                     <option value="Servings">Servings</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -35,35 +35,35 @@
                     <option value="9">9</option>
                     <option value="10">10</option>
                 </select>
-                <input type="submit" value="Add Food" class="btn btn-sm" id="add-food">
+                <input type="submit" value="Add Food" class="btn btn-sm add-food">
             </div>
             <div class="calendar">
-                <input type="text" id="date"/>
+                <input type="text" class="date"/>
             </div>
             <div class="features">
-                <input type="submit" class="btn btn-lg" value="Display Chart" id="chart">
+                <input type="submit" class="btn btn-lg chart" value="Display Chart">
             </div>
             <p class="calories">Total calories for the day:
-                <label id="total-calories"></label>
+                <label class="total-calories"></label>
             </p>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">My Food Records</h3>
                 </div>
                 <div class="panel-body">
-                    <ul id="foodRecords"></ul>
+                    <ul class="foodRecords"></ul>
                 </div>
             </div>
         </div>
     </section>
 
     <div class="chart">
-        <span class="glyphicon glyphicon-remove-circle" id="closeButton"></span>
+        <span class="glyphicon glyphicon-remove-circle closeButton"></span>
         <canvas id="displayChart"></canvas>
     </div>
 
     <!-- Templates -->
-    <script type="text/template" id="item-template">
+    <script type="text/template" class="item-template">
 
             <label>
                 <%- item_name %>
@@ -80,7 +80,7 @@
             <span class="glyphicon glyphicon-remove delete"></span>
 
     </script>
-    <script type="text/template" id="total-calorie-template">
+    <script type="text/template" class="total-calorie-template">
             <label>
                 <%- total_cals %>
             </label>

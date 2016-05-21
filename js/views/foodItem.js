@@ -5,7 +5,7 @@ var app = app || {};
     'use strict';
     app.FoodRecords = Backbone.View.extend({
         tagName: 'li',
-        template: _.template($('#item-template').html()),
+        template: _.template($('.item-template').html()),
 
         render: function() {
             console.log("inside foodrecord");
