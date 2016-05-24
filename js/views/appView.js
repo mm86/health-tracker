@@ -37,7 +37,7 @@ app.AppView = Backbone.View.extend({
             events: {
 
                 'click .add-food': 'addFood', //call addFood function when "add food" button is clicked
-                'click .chart': 'calculateChart', //display chart for the week/month when the chart button is clicked
+                'click .chart-button': 'calculateChart', //display chart for the week/month when the chart button is clicked
                 'keydown .user-input': 'autoSearch', //start search when a character is entered in the input box
 
             },
@@ -238,10 +238,10 @@ app.AppView = Backbone.View.extend({
         self.ref.once('value').then(function(snapshot) {
             for (var i = 0; i < 7; i++) {
                 self.total_day_calories = 0;
-                if (snapshot.child(week[i]).val() == null) {
+                if (snapshot.child(self.week[i]).val() == null) {
                     self.xaxis.push(0);
                 } else {
-                    snapshot.child(week[i]).forEach(function(childSnapshot) {
+                    snapshot.child(self.week[i]).forEach(function(childSnapshot) {
 
                         self.childData = childSnapshot.val().total_calories;
                         self.total_day_calories = self.total_day_calories + self.childData;
@@ -264,7 +264,7 @@ app.AppView = Backbone.View.extend({
         var self = this;
         $(".chart").animate({ width: 'toggle' });
         $('.closeButton').click(function() {
-            self.parentNode.style.display = 'none';
+            this.parentNode.style.display = 'none';
         });
         self.ctx = document.getElementsByClassName("displayChart");
         self.myChart = new Chart(self.ctx, {
