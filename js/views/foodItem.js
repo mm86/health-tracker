@@ -1,4 +1,3 @@
-
 /* global Backbone */
 var app = app || {};
 
@@ -28,4 +27,3 @@ var app = app || {};
         }
     });
 })(jQuery);
-
